@@ -41,6 +41,12 @@
 #define POWEROUTPUTOFFSET 0x53a4
 #define POWERDRAINOFFSET 0x53a8
 
+#define PRODUCINGBUILDINGINDEXOFFSET 0x564c
+#define PRODUCINGUNITINDEXOFFSET 0x5650
+
+#define HOUSETYPECLASSBASEOFFSET 0x34
+#define COUNTRYSTRINGOFFSET 0x24
+
 unsigned counts[0x2000];
 
 bool inited = false;
@@ -75,6 +81,17 @@ unsigned powerOutputPtr;
 unsigned powerDrainPtr;
 unsigned powerOutput;
 unsigned powerDrain;
+
+unsigned producingBuildingIndexPtr;
+unsigned producingUnitIndexPtr;
+unsigned producingBuildingIndex;
+unsigned producingUnitIndex;
+
+unsigned houseTypeClassBasePtr;
+unsigned houseTypeClassBase;
+
+unsigned countryNamePtr;
+char countryName[0x40];
 
 unsigned GIcount, ALLIDOGcount, SOVDOGcount;
 unsigned ALLITANKcount, SOVTANKcount; 
@@ -215,6 +232,36 @@ void ReadClassBase() {
 		4,
 		NULL);
 	  printf("Player %d powerDrain %u\n", i, powerDrain);
+
+	  /*
+	  // currently unusable
+	  // Producing building
+	  producingBuildingIndexPtr = realClassBase + PRODUCINGBUILDINGINDEXOFFSET;
+	  ReadProcessMemory(handle,
+	  	(const void *)producingBuildingIndexPtr,
+		&producingBuildingIndex,
+		4,
+		NULL);
+	  printf("Player %d producingBuildingIndex %u\n", i, producingBuildingIndex);
+	  */
+	 // HouseTypeClassBase
+	 houseTypeClassBasePtr = realClassBase + HOUSETYPECLASSBASEOFFSET;
+	 ReadProcessMemory(handle,
+	   (const void *)houseTypeClassBasePtr,
+	   &houseTypeClassBase,
+	   4,
+	   NULL);
+	 printf("Player %d houseTypeClassBase %x\n", i, houseTypeClassBase);
+
+	 // Country name
+	 countryNamePtr = houseTypeClassBase + COUNTRYSTRINGOFFSET;
+	 ReadProcessMemory(handle,
+	   (const void *)countryNamePtr,
+	   &countryName,
+	   25,
+	   NULL);
+	 printf("Player %d countryName %s\n", i, countryName);
+
 
   	  // infantry part
   	  itemPtr = realClassBase + INFOFFSET;
