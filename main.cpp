@@ -32,6 +32,15 @@
 #define ALLITANKOFFSET 0x9
 #define SOVTANKOFFSET 0x3 
 
+#define CREDITSPENT_OFFSET 0x2dc
+#define BALANCEOFFSET 0x30c
+#define USERNAMEOFFSET 0x1602a
+#define ISWINNEROFFSET 0x1f7
+#define ISLOSEROFFSET 0x1f8
+
+#define POWEROUTPUTOFFSET 0x53a4
+#define POWERDRAINOFFSET 0x53a8
+
 unsigned counts[0x2000];
 
 bool inited = false;
@@ -48,6 +57,24 @@ unsigned realClassBasePtr;
 unsigned realClassBase;
 unsigned itemPtr;
 unsigned itemArrayBase;
+
+unsigned balancePtr;
+unsigned spentCreditPtr;
+unsigned balance;
+unsigned spentCredit;
+
+unsigned userNamePtr;
+char UserName[0x20];
+
+unsigned isWinnerPtr;
+unsigned isLoserPtr;
+bool isWinner;
+bool isLoser;
+
+unsigned powerOutputPtr;
+unsigned powerDrainPtr;
+unsigned powerOutput;
+unsigned powerDrain;
 
 unsigned GIcount, ALLIDOGcount, SOVDOGcount;
 unsigned ALLITANKcount, SOVTANKcount; 
@@ -126,6 +153,69 @@ void ReadClassBase() {
 		4,
 		NULL);
   	  
+	  // Balance
+      balancePtr = realClassBase + BALANCEOFFSET;
+  	  ReadProcessMemory(handle,	
+		(const void *)balancePtr,
+		&balance,
+		4,
+		NULL);
+	  printf("Player %d balance %u\n", i, balance);
+
+	  // Spent money
+	  spentCreditPtr = realClassBase + CREDITSPENT_OFFSET;
+	  ReadProcessMemory(handle,
+	  	(const void *)spentCreditPtr,
+		&spentCredit,
+		4,
+		NULL);
+	  printf("Player %d spent %u\n", i, spentCredit);
+
+	  // User name
+	  userNamePtr = realClassBase + USERNAMEOFFSET;
+	  ReadProcessMemory(handle,
+	  	(const void *)userNamePtr,
+		&UserName,
+		0x20,
+		NULL);
+	  printf("Player %d name %ls\n", i, UserName);
+
+	  // IsWinner
+	  isWinnerPtr = realClassBase + ISWINNEROFFSET;
+	  ReadProcessMemory(handle,
+		(const void *)isWinnerPtr,
+		&isWinner,
+		1,
+		NULL);
+	  printf("Player %d isWinner %u\n", i, isWinner);
+
+	  // IsLoser
+	  isLoserPtr = realClassBase + ISLOSEROFFSET;
+	  ReadProcessMemory(handle,
+		(const void *)isLoserPtr,
+		&isLoser,
+		1,
+		NULL);
+	  printf("Player %d isLoser %u\n", i, isLoser);
+
+	  // Power output
+	  powerOutputPtr = realClassBase + POWEROUTPUTOFFSET;
+	  ReadProcessMemory(handle,
+	  	(const void *)powerOutputPtr,
+		&powerOutput,
+		4,
+		NULL);
+	  printf("Player %d powerOutput %u\n", i, powerOutput);
+
+	  // Power drain
+	  powerDrainPtr = realClassBase + POWERDRAINOFFSET;
+	  ReadProcessMemory(handle,
+	  	(const void *)powerDrainPtr,
+		&powerDrain,
+		4,
+		NULL);
+	  printf("Player %d powerDrain %u\n", i, powerDrain);
+
   	  // infantry part
   	  itemPtr = realClassBase + INFOFFSET;
   	  ReadProcessMemory(handle,
