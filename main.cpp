@@ -34,6 +34,10 @@
 #define ALLIMINEROFFSET (0x84 / 4)
 #define SOVMINEROFFSET (0x4 / 4) // or 0x4 / 4
 
+#define BUILDINGOFFSET 0x5554
+#define ALLIWARFACTORYOFFSET (0x1c / 4)
+#define SOVWARFACTORYOFFSET (0x38 / 4)
+
 
 #define CREDITSPENT_OFFSET 0x2dc
 #define BALANCEOFFSET 0x30c
@@ -100,6 +104,8 @@ unsigned GIcount, ALLIDOGcount, SOVDOGcount;
 unsigned ALLITANKcount, SOVTANKcount;
 
 unsigned ALLIMinerCount, SOVMinerCount;
+
+unsigned ALLIWarFactoryCount, SOVWarFactoryCount;
 
 const char *allieCountries[] = {
   "Americans",
@@ -280,6 +286,33 @@ void ReadClassBase() {
 	   25,
 	   NULL);
 	 printf("Player %d countryName %s\n", i, countryName);
+
+	  // building part
+	  itemPtr = realClassBase + BUILDINGOFFSET;
+	  ReadProcessMemory(handle,
+		(const void *)itemPtr,
+		&itemArrayBase,
+		4,
+		NULL);
+	  printf("Building itemPtr %x\n", itemPtr);
+	  printf("Building itemArrayBase %x\n", itemArrayBase);
+
+	  // War Factory
+	  ReadProcessMemory(handle,
+	    (const void *)(itemArrayBase + 4 * ALLIWARFACTORYOFFSET),
+		&ALLIWarFactoryCount,
+		4,
+		NULL);
+	  printf("Player %d ALLIWARFACTORYcount %u\n", i, ALLIWarFactoryCount);
+
+	  ReadProcessMemory(handle,
+	    (const void *)(itemArrayBase + 4 * SOVWARFACTORYOFFSET),
+		&SOVWarFactoryCount,
+		4,
+		NULL);
+	  printf("Player %d SOVWARFACTORYcount %u\n", i, SOVWarFactoryCount);
+
+
 
 
   	  // infantry part
