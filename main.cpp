@@ -31,6 +31,9 @@
 #define TANKOFFSET 0x5568
 #define ALLITANKOFFSET 0x9
 #define SOVTANKOFFSET 0x3 
+#define ALLIMINEROFFSET (0x84 / 4)
+#define SOVMINEROFFSET (0x4 / 4) // or 0x4 / 4
+
 
 #define CREDITSPENT_OFFSET 0x2dc
 #define BALANCEOFFSET 0x30c
@@ -94,7 +97,23 @@ unsigned countryNamePtr;
 char countryName[0x40];
 
 unsigned GIcount, ALLIDOGcount, SOVDOGcount;
-unsigned ALLITANKcount, SOVTANKcount; 
+unsigned ALLITANKcount, SOVTANKcount;
+
+unsigned ALLIMinerCount, SOVMinerCount;
+
+const char *allieCountries[] = {
+  "Americans",
+  "Alliance" // Korea
+  "French",
+  "Germans",
+  "British"
+};
+const char *sovietCountries[] = {
+  "Africans", // Lybia
+  "Arabs", // Iraq
+  "Confederation", // Cuba
+  "Russians"
+};
 
 DWORD findPidByName(const char* name)
 {
@@ -314,6 +333,21 @@ void ReadClassBase() {
 	    4,
 	    NULL);
 	  printf("Player %d Sov Tank count %u AlliTank count %u\n", i, SOVTANKcount, ALLITANKcount);
+
+	  // ALLIMiner
+	  ReadProcessMemory(handle,
+	    (const void *)(itemArrayBase + 4 * ALLIMINEROFFSET),
+	    &ALLIMinerCount,
+	    4,
+	    NULL);
+	  printf("Player %d Alli Miner count %u\n", i, ALLIMinerCount);
+	  // SOVMiner
+	  ReadProcessMemory(handle,
+	    (const void *)(itemArrayBase + 4 * SOVMINEROFFSET),
+	    &SOVMinerCount,
+	    4,
+	    NULL);
+	  printf("Player %d Sov Miner count %u\n", i, SOVMinerCount);
 	  /*
 	  for (int i = 0; i < 0x200; i++) {
 	  	if (counts[i] == 9) {
