@@ -18,7 +18,7 @@
 #include <iostream>
 #include <Windows.h>
 #include <TlHelp32.h> //for PROCESSENTRY32, needs to be included after windows.h
-
+#include <stdint.h>
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 #define MAXPLAYERS 8
@@ -53,6 +53,12 @@
 
 #define HOUSETYPECLASSBASEOFFSET 0x34
 #define COUNTRYSTRINGOFFSET 0x24
+
+#define COLOROFFSET 0x56f9
+
+struct ColorStruct {
+	uint8_t rgb[3]; // R G B 0 1 2
+};
 
 unsigned counts[0x2000];
 
@@ -107,6 +113,9 @@ unsigned ALLIMinerCount, SOVMinerCount;
 
 unsigned ALLIWarFactoryCount, SOVWarFactoryCount;
 
+unsigned playerColorPtr;
+struct ColorStruct playerColor;
+
 const char *allieCountries[] = {
   "Americans",
   "Alliance" // Korea
@@ -115,7 +124,7 @@ const char *allieCountries[] = {
   "British"
 };
 const char *sovietCountries[] = {
-  "Africans", // Lybia
+  "Africans", // Libya
   "Arabs", // Iraq
   "Confederation", // Cuba
   "Russians"
@@ -286,6 +295,14 @@ void ReadClassBase() {
 	   25,
 	   NULL);
 	 printf("Player %d countryName %s\n", i, countryName);
+
+	 playerColorPtr = houseTypeClassBase + COLOROFFSET;
+	 ReadProcessMemory(handle,
+	   (const void *)playerColorPtr,
+	   &playerColor,
+	   3,
+	   NULL);
+	printf("Player %d color r %u g %u b %u\n", i, playerColor.rgb[0], playerColor.rgb[1], playerColor.rgb[2]);
 
 	  // building part
 	  itemPtr = realClassBase + BUILDINGOFFSET;
