@@ -74,7 +74,7 @@
 #define FLAKTRACKOFFSET		0x11
 #define VTHREEOFFSET		0x0e
 #define SPIDEROFFSET		0x10
-#define APOCALYPSEOFFSET	0x08
+#define APOCALYPSEOFFSET	0x02
 #define SOVMCVOFFSET		0x1a
 #define KIROVOFFSET			0x0f
 #define SOVTRANSOFFSET		0x04	// soviet transport ship
